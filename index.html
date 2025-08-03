@@ -272,10 +272,16 @@
         import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
         // --- FIREBASE CONFIGURATION ---
-        const firebaseConfig = typeof __firebase_config !== 'undefined'
-            ? JSON.parse(__firebase_config)
-            : { /* FALLBACK CONFIG - You can paste your config here for local testing */ };
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = {
+  apiKey: "AIzaSyC1bmNxdWK4vGikdEWPAREaMR3YFamhE50",
+  authDomain: "fpd-portal.firebaseapp.com",
+  projectId: "fpd-portal",
+  storageBucket: "fpd-portal.firebasestorage.app",
+  messagingSenderId: "891327950749",
+  appId: "1:891327950749:web:7bb8288cab88a462d6c974",
+  measurementId: "G-9VNFYMGH5Q"
+};
+
         
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
