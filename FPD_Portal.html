@@ -1,0 +1,719 @@
+<!-- Ticker Links still not working, Needs organization. -->
+
+
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fulton Police Department - Internal Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { 
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'fpd-blue': '#2c3e50',
+                        'fpd-light-blue': '#3498db',
+                        'fpd-gray': '#ecf0f1',
+                        'fpd-accent': '#ecba33',
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        .ticker-text {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: ticker 30s linear infinite;
+        }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        .admin-only { display: none; }
+        body.admin-mode .admin-only { display: block; }
+        .modal-backdrop { background-color: rgba(0,0,0,0.5); }
+        .classification-link { text-decoration: none; }
+    </style>
+</head>
+<body class="bg-fpd-gray dark:bg-gray-800 transition-colors duration-300">
+
+    <!-- Top Information Classification Banner -->
+    <a href="./classification_info.html" target="_blank" id="top-classification-link" class="classification-link hidden">
+        <div id="classification-banner-top" class="text-white p-1 text-center text-xs font-semibold transition-colors">
+            <span class="classification-text-span"></span>
+        </div>
+    </a>
+
+    <!-- Announcement Ticker -->
+    <a id="ticker-link" class="hidden">
+        <div id="announcement-ticker" class="p-2 text-center text-sm font-semibold overflow-hidden transition-colors">
+            <div class="overflow-hidden">
+               <span id="ticker-content" class="ticker-text"></span>
+            </div>
+        </div>
+    </a>
+
+    <!-- Header -->
+    <header class="bg-fpd-blue shadow-md sticky top-0 z-40">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="https://placehold.co/48x48/ffffff/2c3e50?text=FPD" alt="Fulton Police Department Logo" class="h-12 w-12 mr-4 rounded-full">
+                <h1 class="text-2xl font-bold text-white">FPD Internal Portal</h1>
+            </div>
+            <div class="flex items-center">
+                <div class="hidden md:flex items-center space-x-6 text-white">
+                    <a href="#forms" class="hover:text-fpd-light-blue">Online Forms</a>
+                    <a href="#links" class="hover:text-fpd-light-blue">Useful Links</a>
+                    <a href="#news" class="hover:text-fpd-light-blue">Memos</a>
+                </div>
+                <!-- Search Bar -->
+                <div class="relative ml-6 hidden md:block">
+                    <input type="search" id="search-input" placeholder="Search..." class="bg-gray-700 text-white rounded-full py-2 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-fpd-light-blue w-48 transition-all duration-300 focus:w-64">
+                    <svg class="w-5 h-5 text-gray-400 absolute top-1/2 right-3 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <div class="flex items-center ml-2">
+                    <button id="admin-login-btn" class="text-gray-300 hover:text-white rounded-lg p-2.5">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </button>
+                    <button id="theme-toggle" type="button" class="text-gray-300 hover:text-white rounded-lg text-sm p-2.5">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 5.05A1 1 0 003.636 6.464l.707.707a1 1 0 001.414-1.414l-.707-.707zM3 11a1 1 0 100-2H2a1 1 0 100 2h1zM6.464 16.364l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
+                    <button class="md:hidden flex items-center ml-4 text-white" id="mobile-menu-button">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div class="hidden md:hidden bg-fpd-blue text-white" id="mobile-menu">
+            <a href="#forms" class="block py-2 px-4 text-sm hover:bg-fpd-light-blue">Online Forms</a>
+            <a href="#links" class="block py-2 px-4 text-sm hover:bg-fpd-light-blue">Useful Links</a>
+            <a href="#news" class="block py-2 px-4 text-sm hover:bg-fpd-light-blue">Memos</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Online Forms Section -->
+            <section id="forms">
+                <h2 class="text-3xl font-bold text-fpd-blue dark:text-white mb-6">Online Forms</h2>
+                <div id="forms-list" class="space-y-4">
+                    <!-- Forms will be dynamically inserted here -->
+                </div>
+                <button id="add-form-btn" class="admin-only mt-4 text-white bg-fpd-light-blue hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">Add New Form</button>
+            </section>
+
+            <!-- Useful Links Section -->
+            <section id="links">
+                <h2 class="text-3xl font-bold text-fpd-blue dark:text-white mb-6">Useful Links</h2>
+                <div id="links-list" class="space-y-4">
+                    <!-- Links will be dynamically inserted here -->
+                </div>
+                 <button id="add-link-btn" class="admin-only mt-4 text-white bg-fpd-light-blue hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">Add New Link</button>
+            </section>
+        </div>
+
+        <!-- Memos Section -->
+        <section id="news" class="mt-12">
+            <h2 class="text-3xl font-bold text-fpd-blue dark:text-white mb-6">Memos & Updates</h2>
+            <div id="memos-list" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Memos will be dynamically inserted here -->
+            </div>
+            <button id="add-memo-btn" class="admin-only mt-4 text-white bg-fpd-light-blue hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">Add New Memo</button>
+        </section>
+    </main>
+
+    <!-- Bottom Information Classification Banner -->
+    <a href="./classification_info.html" target="_blank" id="bottom-classification-link" class="classification-link hidden">
+        <div id="classification-banner-bottom" class="text-white p-1 text-center text-xs font-semibold transition-colors">
+            <span class="classification-text-span"></span>
+        </div>
+    </a>
+
+    <!-- Footer -->
+    <footer class="bg-fpd-blue text-white">
+        <div class="container mx-auto px-6 py-4">
+            <div class="text-center text-gray-400 text-sm"></div>
+        </div>
+    </footer>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-backdrop flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-sm">
+            <h3 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6">Admin Login</h3>
+            <input type="password" id="admin-password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter password">
+            <p id="login-error" class="text-red-500 text-sm mt-2 hidden">Incorrect password.</p>
+            <div class="flex justify-end space-x-4 mt-6">
+                <button id="cancel-login-btn" class="text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg px-5 py-2.5">Cancel</button>
+                <button id="submit-login-btn" class="text-white bg-fpd-light-blue hover:bg-blue-700 rounded-lg px-5 py-2.5">Login</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Panel Modal -->
+    <div id="admin-panel-modal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-backdrop flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800 dark:text-white">Admin Control Panel</h3>
+                <button id="close-admin-panel-btn" class="text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white text-3xl">&times;</button>
+            </div>
+            
+            <!-- Site Banners Section -->
+            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mb-6">
+                 <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-3">Site Banners</h4>
+                 <div class="space-y-4">
+                    <div>
+                        <label for="ticker-message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Announcement Ticker Message:</label>
+                        <input type="text" id="ticker-message" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:text-white" placeholder="Leave blank to hide ticker">
+                    </div>
+                     <div class="flex items-end space-x-2">
+                        <div class="flex-grow">
+                           <label for="ticker-url" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ticker URL (Optional):</label>
+                           <input type="url" id="ticker-url" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:text-white" placeholder="https://example.com">
+                        </div>
+                        <div>
+                           <label for="ticker-color" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Color:</label>
+                           <input type="color" id="ticker-color" class="p-1 h-10 w-14 block bg-white border border-gray-300 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none" value="#ecba33">
+                        </div>
+                        <button id="reset-color-btn" class="text-white bg-gray-500 hover:bg-gray-600 font-medium rounded-lg text-sm px-4 py-2.5">Reset</button>
+                     </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Information Classification:</label>
+                    <fieldset class="space-y-2" id="classification-fieldset">
+                        <div class="flex items-center">
+                            <input id="class-unclassified" name="classification" type="checkbox" value="Unclassified" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="class-unclassified" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Unclassified</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="class-les" name="classification" type="checkbox" value="Law Enforcement Sensitive" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="class-les" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Law Enforcement Sensitive</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="class-fpd" name="classification" type="checkbox" value="FPD Internal" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="class-fpd" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">FPD Internal</label>
+                        </div>
+                    </fieldset>
+                </div>
+                <button id="save-settings-btn" class="mt-4 text-white bg-fpd-light-blue hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">Save Settings</button>
+            </div>
+            
+            <p class="text-right mt-4"><button id="logout-btn" class="text-sm text-red-500 hover:underline">Logout</button></p>
+        </div>
+    </div>
+    
+    <!-- Add/Edit Item Modal -->
+    <div id="item-modal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-backdrop flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-lg">
+             <h3 id="item-modal-title" class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Add Item</h3>
+             <input type="hidden" id="item-id">
+             <input type="hidden" id="item-type">
+             <div class="space-y-4">
+                 <div>
+                    <label for="item-title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title:</label>
+                    <input type="text" id="item-title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                </div>
+                 <div id="item-desc-container">
+                    <label for="item-desc" id="item-desc-label" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description:</label>
+                    <input type="text" id="item-desc" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                </div>
+                 <div id="item-body-container" class="hidden">
+                    <label for="item-body" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Body:</label>
+                    <textarea id="item-body" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                </div>
+                 <div id="item-url-container">
+                    <label for="item-url" id="item-url-label" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">URL:</label>
+                    <input type="url" id="item-url" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                </div>
+             </div>
+             <div class="flex justify-end space-x-4 mt-6">
+                <button id="cancel-item-btn" class="text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg px-5 py-2.5">Cancel</button>
+                <button id="save-item-btn" class="text-white bg-fpd-light-blue hover:bg-blue-700 rounded-lg px-5 py-2.5">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Memo Reader Modal -->
+    <div id="memo-reader-modal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-backdrop flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b dark:border-gray-700">
+                <h3 id="memo-reader-title" class="text-2xl font-bold text-gray-800 dark:text-white"></h3>
+                <button id="close-memo-reader-btn" class="text-gray-500 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white text-3xl">&times;</button>
+            </div>
+            <div id="memo-reader-body" class="p-6 overflow-y-auto text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="confirm-delete-modal" class="hidden fixed inset-0 z-50 overflow-y-auto modal-backdrop flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-sm">
+            <h3 class="text-lg font-bold text-center text-gray-800 dark:text-white mb-4">Are you sure?</h3>
+            <p class="text-center text-gray-600 dark:text-gray-300 mb-6">This action cannot be undone.</p>
+            <div class="flex justify-center space-x-4">
+                <button id="cancel-delete-btn" class="text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg px-5 py-2.5">Cancel</button>
+                <button id="confirm-delete-btn" class="text-white bg-red-600 hover:bg-red-700 rounded-lg px-5 py-2.5">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Firebase and other imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // --- FIREBASE CONFIGURATION ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined'
+            ? JSON.parse(__firebase_config)
+            : { /* FALLBACK CONFIG */ };
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // --- AUTHENTICATION ---
+        try {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
+        } catch (error) {
+            console.error("Firebase authentication failed:", error);
+        }
+
+        // --- DATABASE PATHS ---
+        const formsCollectionPath = `artifacts/${appId}/public/data/forms`;
+        const linksCollectionPath = `artifacts/${appId}/public/data/links`;
+        const memosCollectionPath = `artifacts/${appId}/public/data/memos`;
+        const configDocPath = `artifacts/${appId}/public/data/config/site`;
+
+        // --- DOM ELEMENTS ---
+        const topClassificationLink = document.getElementById('top-classification-link');
+        const bottomClassificationLink = document.getElementById('bottom-classification-link');
+        const classificationSpans = document.querySelectorAll('.classification-text-span');
+        const formsList = document.getElementById('forms-list');
+        const linksList = document.getElementById('links-list');
+        const memosList = document.getElementById('memos-list');
+        const tickerLink = document.getElementById('ticker-link');
+        const tickerContent = document.getElementById('ticker-content');
+        const memoReaderModal = document.getElementById('memo-reader-modal');
+        const confirmDeleteModal = document.getElementById('confirm-delete-modal');
+
+        // --- HELPER FUNCTIONS ---
+        function getContrastColor(hex) {
+            if (hex.indexOf('#') === 0) {
+                hex = hex.slice(1);
+            }
+            // convert 3-digit hex to 6-digits.
+            if (hex.length === 3) {
+                hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+            }
+            if (hex.length !== 6) {
+                return '#000000'; // default to black
+            }
+            var r = parseInt(hex.slice(0, 2), 16),
+                g = parseInt(hex.slice(2, 4), 16),
+                b = parseInt(hex.slice(4, 6), 16);
+            // http://www.w3.org/TR/AERT#color-contrast
+            return (r * 0.299 + g * 0.587 + b * 0.114) > 186
+                ? '#000000'
+                : '#FFFFFF';
+        }
+
+        // --- RENDER FUNCTIONS ---
+        const renderItem = (listElement, doc, type) => {
+            const data = doc.data();
+            const div = document.createElement('div');
+            div.setAttribute('data-id', doc.id);
+            div.className = 'relative bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md searchable-item';
+            div.dataset.searchText = `${data.title || ''} ${data.description || ''}`.toLowerCase();
+            
+            div.innerHTML = `
+                <a href="${data.url || '#'}" target="_blank">
+                    <h3 class="text-xl font-semibold text-fpd-light-blue dark:text-fpd-light-blue">${data.title || 'No Title'}</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2">${data.description || ''}</p>
+                </a>
+                <div class="admin-only absolute top-2 right-2 flex space-x-2">
+                    <button data-action="edit" class="text-xs text-gray-500 hover:text-blue-500">Edit</button>
+                    <button data-action="delete" class="text-xs text-gray-500 hover:text-red-500">Delete</button>
+                </div>
+            `;
+            listElement.appendChild(div);
+
+            div.querySelector('[data-action="edit"]').addEventListener('click', () => openItemModal(type, doc));
+            div.querySelector('[data-action="delete"]').addEventListener('click', () => deleteItem(type, doc.id));
+        };
+
+        const renderMemo = (listElement, doc) => {
+            const data = doc.data();
+            const div = document.createElement('div');
+            div.setAttribute('data-id', doc.id);
+            div.className = 'relative bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md searchable-item';
+            div.dataset.searchText = `${data.title || ''} ${data.date || ''} ${data.body || ''}`.toLowerCase();
+            div.innerHTML = `
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">${data.title || 'No Title'}</h3>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">${data.date || ''}</p>
+                <button data-action="read" class="text-fpd-light-blue dark:text-fpd-light-blue hover:underline mt-4 inline-block">Read Memo</button>
+                <div class="admin-only absolute top-2 right-2 flex space-x-2">
+                    <button data-action="edit" class="text-xs text-gray-500 hover:text-blue-500">Edit</button>
+                    <button data-action="delete" class="text-xs text-gray-500 hover:text-red-500">Delete</button>
+                </div>
+            `;
+            listElement.appendChild(div);
+
+            div.querySelector('[data-action="read"]').addEventListener('click', () => openMemoReader(data));
+            div.querySelector('[data-action="edit"]').addEventListener('click', () => openItemModal('memos', doc));
+            div.querySelector('[data-action="delete"]').addEventListener('click', () => deleteItem('memos', doc.id));
+        };
+
+        // --- FIRESTORE REAL-TIME LISTENERS ---
+        onSnapshot(collection(db, formsCollectionPath), (snapshot) => {
+            formsList.innerHTML = '';
+            snapshot.docs.forEach(doc => renderItem(formsList, doc, 'forms'));
+        });
+
+        onSnapshot(collection(db, linksCollectionPath), (snapshot) => {
+            linksList.innerHTML = '';
+            snapshot.docs.forEach(doc => renderItem(linksList, doc, 'links'));
+        });
+
+        onSnapshot(collection(db, memosCollectionPath), (snapshot) => {
+            memosList.innerHTML = '';
+            snapshot.docs.forEach(doc => renderMemo(memosList, doc));
+        });
+
+        onSnapshot(doc(db, configDocPath), (doc) => {
+            const data = doc.data() || {};
+            
+            // Update Ticker
+            const tickerDiv = document.getElementById('announcement-ticker');
+            const hasMessage = data.tickerMessage && data.tickerMessage.trim() !== '';
+            const hasUrl = data.tickerUrl && data.tickerUrl.trim() !== '';
+
+            if (hasMessage) {
+                tickerContent.textContent = data.tickerMessage;
+                if (hasUrl) {
+                    tickerLink.href = data.tickerUrl;
+                    tickerLink.target = '_blank';
+                    tickerDiv.style.cursor = 'pointer';
+                } else {
+                    tickerLink.removeAttribute('href');
+                    tickerLink.removeAttribute('target');
+                    tickerDiv.style.cursor = 'default';
+                }
+                const bgColor = data.tickerColor || '#ecba33';
+                tickerDiv.style.backgroundColor = bgColor;
+                tickerDiv.style.color = getContrastColor(bgColor);
+                tickerLink.classList.remove('hidden');
+            } else {
+                tickerLink.classList.add('hidden');
+            }
+            
+            // Update Classification Banners
+            const classifications = data.classification || {};
+            const titles = [];
+            if (classifications.unclassified) titles.push('UNCLASSIFIED');
+            if (classifications.les) titles.push('LAW ENFORCEMENT SENSITIVE');
+            if (classifications.fpd) titles.push('FPD INTERNAL');
+
+            const banners = [topClassificationLink, bottomClassificationLink];
+            const bannerDivs = [document.getElementById('classification-banner-top'), document.getElementById('classification-banner-bottom')];
+            const colorClasses = ['bg-green-500', 'hover:bg-green-600', 'bg-orange-500', 'hover:bg-orange-600', 'bg-red-500', 'hover:bg-red-600'];
+
+            if (titles.length > 0) {
+                const bannerText = titles.join('//');
+                classificationSpans.forEach(span => span.textContent = bannerText);
+                
+                let primaryColor, hoverColor;
+                if (classifications.fpd) {
+                    primaryColor = 'bg-red-500';
+                    hoverColor = 'hover:bg-red-600';
+                } else if (classifications.les) {
+                    primaryColor = 'bg-orange-500';
+                    hoverColor = 'hover:bg-orange-600';
+                } else {
+                    primaryColor = 'bg-green-500';
+                    hoverColor = 'hover:bg-green-600';
+                }
+                
+                banners.forEach(banner => banner.classList.remove('hidden'));
+                bannerDivs.forEach(div => {
+                    div.classList.remove(...colorClasses);
+                    div.classList.add(primaryColor, hoverColor);
+                });
+
+            } else {
+                 banners.forEach(banner => banner.classList.add('hidden'));
+            }
+
+            // Update admin panel inputs
+            document.getElementById('ticker-message').value = data.tickerMessage || '';
+            document.getElementById('ticker-url').value = data.tickerUrl || '';
+            document.getElementById('ticker-color').value = data.tickerColor || '#ecba33';
+            document.getElementById('class-unclassified').checked = !!classifications.unclassified;
+            document.getElementById('class-les').checked = !!classifications.les;
+            document.getElementById('class-fpd').checked = !!classifications.fpd;
+        });
+
+        // --- ADMIN MODE LOGIC ---
+        const ADMIN_PASSWORD = "T@3kw0nd0"; 
+        const body = document.body;
+        const loginModal = document.getElementById('admin-login-modal');
+        const adminPanelModal = document.getElementById('admin-panel-modal');
+
+        const enterAdminMode = () => {
+            body.classList.add('admin-mode');
+            sessionStorage.setItem('isAdmin', 'true');
+            loginModal.classList.add('hidden');
+            adminPanelModal.classList.remove('hidden');
+        };
+
+        const exitAdminMode = () => {
+            body.classList.remove('admin-mode');
+            sessionStorage.removeItem('isAdmin');
+            adminPanelModal.classList.add('hidden');
+        };
+
+        if (sessionStorage.getItem('isAdmin') === 'true') {
+            body.classList.add('admin-mode');
+        }
+
+        // --- ADMIN EVENT LISTENERS ---
+        document.getElementById('admin-login-btn').addEventListener('click', () => {
+            if (sessionStorage.getItem('isAdmin') === 'true') {
+                adminPanelModal.classList.remove('hidden');
+            } else {
+                loginModal.classList.remove('hidden');
+            }
+        });
+        document.getElementById('cancel-login-btn').addEventListener('click', () => {
+            document.getElementById('login-error').classList.add('hidden');
+            loginModal.classList.add('hidden');
+        });
+        
+        const submitLogin = () => {
+            const passwordInput = document.getElementById('admin-password').value;
+            const loginError = document.getElementById('login-error');
+
+            if (passwordInput === ADMIN_PASSWORD) {
+                loginError.classList.add('hidden');
+                enterAdminMode();
+            } else {
+                loginError.classList.remove('hidden');
+            }
+        };
+
+        document.getElementById('submit-login-btn').addEventListener('click', submitLogin);
+        
+        document.getElementById('admin-password').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                submitLogin();
+            }
+        });
+        
+        document.getElementById('logout-btn').addEventListener('click', exitAdminMode);
+        document.getElementById('close-admin-panel-btn').addEventListener('click', () => adminPanelModal.classList.add('hidden'));
+
+        document.getElementById('save-settings-btn').addEventListener('click', async () => {
+            const tickerMsg = document.getElementById('ticker-message').value;
+            const tickerUrl = document.getElementById('ticker-url').value;
+            const tickerColor = document.getElementById('ticker-color').value;
+            const classificationSettings = {
+                unclassified: document.getElementById('class-unclassified').checked,
+                les: document.getElementById('class-les').checked,
+                fpd: document.getElementById('class-fpd').checked,
+            };
+            
+            try {
+                await setDoc(doc(db, configDocPath), {
+                    tickerMessage: tickerMsg,
+                    tickerUrl: tickerUrl,
+                    tickerColor: tickerColor,
+                    classification: classificationSettings
+                }, { merge: true });
+                alert('Settings saved!');
+            } catch (error) {
+                console.error("Error saving settings: ", error);
+                alert("Failed to save settings. See console for details.");
+            }
+        });
+        
+        document.getElementById('reset-color-btn').addEventListener('click', () => {
+            document.getElementById('ticker-color').value = '#ecba33';
+        });
+
+        // --- ITEM CRUD MODAL LOGIC ---
+        const itemModal = document.getElementById('item-modal');
+        const openItemModal = (type, docToEdit = null) => {
+            itemModal.querySelector('#item-type').value = type;
+            const modalTitle = itemModal.querySelector('#item-modal-title');
+            const descLabel = document.getElementById('item-desc-label');
+            const urlLabel = document.getElementById('item-url-label');
+            const descInput = document.getElementById('item-desc');
+            const bodyContainer = document.getElementById('item-body-container');
+            const urlContainer = document.getElementById('item-url-container');
+
+            if (type === 'memos') {
+                descLabel.textContent = 'Date:';
+                descInput.placeholder = 'e.g., August 1, 2025';
+                urlContainer.classList.add('hidden');
+                bodyContainer.classList.remove('hidden');
+            } else {
+                descLabel.textContent = 'Description:';
+                descInput.placeholder = '';
+                urlContainer.classList.remove('hidden');
+                bodyContainer.classList.add('hidden');
+            }
+
+            if (docToEdit) {
+                const data = docToEdit.data();
+                modalTitle.textContent = `Edit ${type.slice(0,-1)}`;
+                itemModal.querySelector('#item-id').value = docToEdit.id;
+                itemModal.querySelector('#item-title').value = data.title;
+                itemModal.querySelector('#item-desc').value = data.description;
+                itemModal.querySelector('#item-url').value = data.url;
+                itemModal.querySelector('#item-body').value = data.body || '';
+            } else {
+                modalTitle.textContent = `Add New ${type.slice(0,-1)}`;
+                itemModal.querySelector('#item-id').value = '';
+                itemModal.querySelector('#item-title').value = '';
+                itemModal.querySelector('#item-desc').value = '';
+                itemModal.querySelector('#item-url').value = '';
+                itemModal.querySelector('#item-body').value = '';
+            }
+            itemModal.classList.remove('hidden');
+        };
+        
+        document.getElementById('add-form-btn').addEventListener('click', () => openItemModal('forms'));
+        document.getElementById('add-link-btn').addEventListener('click', () => openItemModal('links'));
+        document.getElementById('add-memo-btn').addEventListener('click', () => openItemModal('memos'));
+        document.getElementById('cancel-item-btn').addEventListener('click', () => itemModal.classList.add('hidden'));
+        
+        document.getElementById('save-item-btn').addEventListener('click', async () => {
+            const id = itemModal.querySelector('#item-id').value;
+            const type = itemModal.querySelector('#item-type').value;
+            const data = {
+                title: itemModal.querySelector('#item-title').value,
+                description: itemModal.querySelector('#item-desc').value,
+                url: itemModal.querySelector('#item-url').value,
+                body: itemModal.querySelector('#item-body').value,
+                date: type === 'memos' ? itemModal.querySelector('#item-desc').value : null,
+            };
+
+            try {
+                let collectionPath;
+                if (type === 'forms') collectionPath = formsCollectionPath;
+                else if (type === 'links') collectionPath = linksCollectionPath;
+                else if (type === 'memos') collectionPath = memosCollectionPath;
+
+                if (id) {
+                    await updateDoc(doc(db, collectionPath, id), data);
+                } else {
+                    await addDoc(collection(db, collectionPath), data);
+                }
+                itemModal.classList.add('hidden');
+            } catch (error) {
+                console.error("Error saving item: ", error);
+                alert("Failed to save item. See console for details.");
+            }
+        });
+
+        // --- DELETE CONFIRMATION LOGIC ---
+        let deleteInfo = { type: null, id: null };
+
+        const deleteItem = (type, id) => {
+            deleteInfo = { type, id };
+            confirmDeleteModal.classList.remove('hidden');
+        };
+
+        document.getElementById('cancel-delete-btn').addEventListener('click', () => {
+            confirmDeleteModal.classList.add('hidden');
+        });
+
+        document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+            const { type, id } = deleteInfo;
+            if (type && id) {
+                try {
+                    let collectionPath;
+                    if (type === 'forms') collectionPath = formsCollectionPath;
+                    else if (type === 'links') collectionPath = linksCollectionPath;
+                    else if (type === 'memos') collectionPath = memosCollectionPath;
+
+                    await deleteDoc(doc(db, collectionPath, id));
+                } catch (error) {
+                    console.error("Error deleting item: ", error);
+                    alert("Failed to delete item. See console for details.");
+                }
+            }
+            confirmDeleteModal.classList.add('hidden');
+        });
+        
+        // --- MEMO READER LOGIC ---
+        const openMemoReader = (data) => {
+            document.getElementById('memo-reader-title').textContent = data.title;
+            document.getElementById('memo-reader-body').textContent = data.body;
+            memoReaderModal.classList.remove('hidden');
+        };
+        document.getElementById('close-memo-reader-btn').addEventListener('click', () => {
+            memoReaderModal.classList.add('hidden');
+        });
+
+        // --- SEARCH LOGIC ---
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            document.querySelectorAll('.searchable-item').forEach(item => {
+                const itemText = item.dataset.searchText;
+                if (itemText.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // --- OTHER PAGE SCRIPTS ---
+        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                themeToggleLightIcon.classList.remove('hidden');
+                themeToggleDarkIcon.classList.add('hidden');
+                localStorage.setItem('color-theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                themeToggleDarkIcon.classList.remove('hidden');
+                themeToggleLightIcon.classList.add('hidden');
+                localStorage.setItem('color-theme', 'light');
+            }
+        }
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = localStorage.getItem('color-theme') || (document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        });
+        const savedTheme = localStorage.getItem('color-theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
+    </script>
+</body>
+</html>
